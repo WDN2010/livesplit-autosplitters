@@ -1,0 +1,31 @@
+{
+  "archive": "dist/Nunholy-AutoSplitter-1.2.0-rc4-cold-start-manual-test.zip",
+  "live_windows_runtime": false,
+  "member_count": 19,
+  "member_sha256": {
+    "AUTOSPLIT_EVIDENCE.md": "4960e917652fd891c7c21d1c565baf217da84774d3d43e4cb45d1588d06e5fa1",
+    "Components/asl-help": "c0ece0762d65cb831082a465af2c2cd64cc745d5ede2b7eb339fb84030cb1fb5",
+    "FINISH_TRIGGER_EVIDENCE.md": "78ead358897e5959d4750d1eb30827c9aff61155780a5fd24b1262d56564988a",
+    "LICENSE": "0630aed47f5d7fde3db79e8f6e5c22e32f59c8d881fa76057b5c4db36deccc0d",
+    "NATIVE_TIME_EVIDENCE.md": "090205ca634e5cfe347452b415b07cd0130df0c3ac288e06a54b81c329b0981f",
+    "Nunholy_IGT.asl": "53a39cb7626196cda8bc72365772eaa24ff598818e6a400527b36c31406b08a3",
+    "README.md": "abeb8fcaac6750ed42aa83e296200ecb1269950e0ffd1e263a80ab032903387a",
+    "SHA256SUMS.txt": "e8d755047de3fd3f2e5b4179fca7d2add3b93b655985d571f115c1b82c3646ef",
+    "fetch_dependencies.py": "60ac566a2142c36f51b44d110648ae92e51bcc0d1943907a5853a09622da899f",
+    "package.py": "f24df2d1266cd3c015d9c893816348a767fd85e812c45e7c39e61b3127257986",
+    "tests/compile_and_test_asl.py": "dd5e51f4336f06f039b40f362e99f7e0a48c379805d1626f641c3c11174cb8d4",
+    "tests/compile_asl_actions.py": "39e7e91d8559118d3ee37254c6cd374deb84045258e8f03523f9cba10cae9552",
+    "tests/test_lifecycle.py": "999cd74f29a0a1884b9b7aafd62919eab81dba5a228384de87ed96ea1bf1bb75",
+    "tests/test_native_signature_negative.py": "eaa71d3a7234dcd6c93fdeabeee0c4c47bd5abe0d06599ff6ca53d729cf88c41",
+    "tests/test_packaging.py": "ea7ec9610ee9dfcea6c73879b13d4645f732ce920801f9d791adda26627b4c12",
+    "tests/validate.py": "5a68bc303eef674bf239953183ee03bba0074867f9df9f5dbab170f48e85cfd4",
+    "tests/verify_native_signature.py": "5ad5e1756f017f607b41d544c4d24ca10b8b6b2ee8c507a3c173830c7dfc2913",
+    "third-party/asl-help/LICENSE": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+    "third-party/asl-help/SOURCE.txt": "006804bdec6e8bdaa280c92fd2f05e90173b89b35443e1c27b2007217bfde5d6"
+  },
+  "members": 19,
+  "sha256": "b2a2cf6c83b7b2aed9220b0db2134b24505ad9aec4018983990464238ba6abfd",
+  "source_binaries_excluded": true,
+  "verified_members": 19,
+  "version": "1.2.0-rc4-cold-start-manual-test"
+}

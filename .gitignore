@@ -1,0 +1,14 @@
+# Local build/test output
+**/dist/
+**/tests/.testbuild/
+**/__pycache__/
+*.pyc
+*.log
+.DS_Store
+
+# Third-party runtime helper is fetched from its pinned upstream URL.
+# Local copies are for offline packaging/tests, not source-owned payloads.
+**/Components/asl-help
+
+# Private runtime collections must never be published.
+Nunholy_IGT_runtime_probe*.zip

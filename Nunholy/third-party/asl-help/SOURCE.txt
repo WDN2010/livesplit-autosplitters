@@ -1,0 +1,5 @@
+asl-help corresponding source for this package:
+https://github.com/ero-qt/asl-help/raw/9a17c5ec7108aba1fe1932358703f4e6adaa6b2c/lib/asl-help
+
+The fetched helper is distributed under the GNU General Public License, version 3.
+See LICENSE in this directory for the complete license text.
