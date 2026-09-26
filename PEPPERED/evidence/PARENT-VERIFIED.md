@@ -10,13 +10,13 @@ This is a publication-safe summary of the delivered RC14 candidate. Raw private 
 - Helper SHA-256: `c0ece0762d65cb831082a465af2c2cd64cc745d5ede2b7eb339fb84030cb1fb5`
 - Supported-build manifest SHA-256: `650b38cbecb50db26e6f9126223232be533ba7dc39e0f88eb06fe82eb5668bcf`
 
-Publication preserves these runtime bytes. Public documentation/build packaging has separate fresh package receipts with the same executable identities.
+The timing/reader DLL, helper and supported-build manifest retain these tested bytes. A subsequent ASL-only diagnostics fix makes the checkbox default OFF, gates every PEPPERED-owned logging write, and defers startup output until opt-in. The historical ASL digest above identifies the pre-fix build; the current `build-receipt.json` identifies the corrected ASL. Fresh logging checks and package receipts accompany the change; no ending or timing semantics are changed.
 
 ## What was tested
 
-1. Six offline commands: deterministic build, pure logic538, reader181, bridge123, parent regression2907, emitted-ASL322 plus320 control assertions.
+1. Six offline commands: deterministic build, pure logic538, reader181, bridge123, parent regression2907, emitted-ASL332 plus330 control assertions, including the emitted logger's opt-in file/print privacy tests.
 2. Exact LiveSplit1.8.37 parser/compiler and137-setting readback. This gate uses a settings-only startup scope, not full game/helper activation.
-3. Default-off optional Ending8 friendship-loss setting, all136 old setting definitions unchanged, and an enabled-optional-only137-setting serializer round-trip.
+3. Default-off optional Ending8 friendship-loss setting, all136 old setting IDs/labels/parents preserved (the logging fix intentionally changes only the diagnostics default to OFF), and an enabled-optional-only137-setting serializer round-trip.
 4. Exact final emitted12action bodies compared with tested rendering, source/build receipt integrity, deterministic packaging and adversarial package regression cases.
 5. Fourteen existing layouts replayed on the exact DLL with their files unchanged: six With5/6/7 layouts, six Against5/6/7 layouts, and two ordinary surrender8 layouts. This is routing/settings compatibility, not a new live traversal of every preset.
 6. The unchanged read-only reader has earlier original-Mono owned-object/layout qualification. Those private probes are not shipped and are not equivalent to executing game constructors, Unity callbacks or a running-game reader through the full helper.

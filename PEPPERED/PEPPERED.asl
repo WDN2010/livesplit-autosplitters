@@ -48,24 +48,31 @@ startup
     vars.TimerModel = new TimerModel { CurrentState = timer };
     // asl-help owns vars.Log and replaces it during construction.
     // Keep the bounded file/DbgView sink under a script-specific name.
+    // Startup runs before the saved checkbox preset is fully applied.
+    // Stay silent until update, and check the current opt-in at every call.
+    vars.PepperedLoggingReady = false;
+    vars.PepperedLogBannerSent = false;
     vars.PepperedLog = (Action<string>)(text => {
-        string message = "PEPPERED_ASL " + text.Replace("\r", " ").Replace("\n", " ");
-        print(message);
-        try {
-            const string logPath = "Components/PEPPERED-autosplitter.log";
-            if (!File.Exists(logPath) || new FileInfo(logPath).Length < 2097152)
-                File.AppendAllText(logPath, DateTime.UtcNow.ToString("o") + " " + message + Environment.NewLine);
-        } catch { /* Logging failure never changes timer or game state. */ }
+        // Use a positive guard: ASL rewrites bare returns inside action bodies.
+        if ((bool)vars.PepperedLoggingReady && settings["diagnostics"]) {
+            string message = "PEPPERED_ASL " + text.Replace("\r", " ").Replace("\n", " ");
+            print(message);
+            try {
+                const string logPath = "Components/PEPPERED-autosplitter.log";
+                if (!File.Exists(logPath) || new FileInfo(logPath).Length < 2097152)
+                    File.AppendAllText(logPath, DateTime.UtcNow.ToString("o") + " " + message + Environment.NewLine);
+            } catch { /* Logging failure never changes timer or game state. */ }
+        }
     });
 
-    vars.PepperedLog("boot 0.4.0-rc14 optional-friend-loss; verified_reader_sha256=" + (string)vars.HashBytes(logicBytes) + "; helper=c0ece0762d65cb831082a465af2c2cd64cc745d5ede2b7eb339fb84030cb1fb5");
+    vars.PepperedBootMessage = "boot 0.4.0-rc14 optional-friend-loss; diagnostics opt-in; verified_reader_sha256=" + (string)vars.HashBytes(logicBytes) + "; helper=c0ece0762d65cb831082a465af2c2cd64cc745d5ede2b7eb339fb84030cb1fb5";
     Assembly.Load(helperBytes).CreateInstance("Unity");
     vars.Helper.GameName = "PEPPERED (experimental, original Windows build)";
     vars.Helper.LoadSceneManager = true;
     refreshRate = 60;
 
     settings.Add("enableTimers", false, "EXPERIMENTAL: enable timer actions (unverified on Windows)");
-    settings.Add("diagnostics", true, "Log scene/state transitions for Windows validation");
+    settings.Add("diagnostics", false, "Log scene/state transitions for Windows validation");
     settings.Add("autoStart", true, "Auto-start fresh World 0 only after the intro is ready");
     settings.Add("autoReset", true, "Auto-reset on return to Main Menu (including Ended)");
     settings.Add("splitEndings", true, "Endings (select your category; no star validation)", "enableTimers");
@@ -202,7 +209,7 @@ startup
     settings.Add("scene.w5.coarse.t8", true, "T_8 (Mansion Door Approach)", "sceneWorld5Main");
     settings.Add("scene.w5.coarse.t9", true, "T_9 (Library Prison)", "sceneWorld5Main");
     settings.Add("scene.w5.branch.t_boss", false, "T_Boss (Theodore Boss Battle)", "sceneWorld5Branches");
-    vars.PepperedLog("loaded 0.4.0-rc14 optional-friend-loss; timer actions OFF by default; timing is RTA, not IGT/LRT");
+    // The diagnostic banner is emitted only after an explicit opt-in in update.
 }
 
 init
@@ -311,6 +318,12 @@ init
 
 update
 {
+    vars.PepperedLoggingReady = true;
+    if (settings["diagnostics"] && !(bool)vars.PepperedLogBannerSent) {
+        vars.PepperedLog((string)vars.PepperedBootMessage);
+        vars.PepperedLog("loaded 0.4.0-rc14 optional-friend-loss; diagnostics opt-in; timing is RTA, not IGT/LRT");
+        vars.PepperedLogBannerSent = true;
+    }
     vars.AutoStarting = false;
     vars.AutoSplitting = false;
     vars.Decision = vars.Code.CreateInstance("Peppered.Decision");

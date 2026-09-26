@@ -58,6 +58,44 @@ def body(text, name):
     raise AssertionError('Unclosed action ' + name)
 
 
+def emitted_logger_setup(text):
+    """Execute the emitted startup sink and banner expression, not a fake logger.
+
+    The full startup loads the real asl-help/Unity dependency and is not safe
+    in the Mono adapter. Only the independent logging statements are isolated;
+    every ASL action body is still compiled without modification.
+    """
+    startup = body(text, 'startup')
+    hash_start = startup.index('vars.HashBytes = (Func<byte[], string>)(bytes => {')
+    hash_end = startup.index('\n    });', hash_start) + len('\n    });')
+    sink_start = startup.index('vars.PepperedLog = (Action<string>)(text => {')
+    sink_end = startup.index('\n    });', sink_start) + len('\n    });')
+    sink = startup[sink_start:sink_end]
+    guard = 'if ((bool)vars.PepperedLoggingReady && settings["diagnostics"])'
+    if sink.count(guard) != 1 or sink.index(guard) > min(
+        sink.index('print('), sink.index('File.Exists('), sink.index('new FileInfo('),
+        sink.index('File.AppendAllText(')
+    ) or not re.search(re.escape(guard) + r'\s*{', sink):
+        raise RuntimeError('emitted logger is not guarded before print and file access')
+    if re.search(r'\breturn\s*;', sink):
+        raise RuntimeError('bare lambda return is rewritten by the official ASL compiler')
+    if 'vars.PepperedLog(' in startup or 'print(' in startup[:sink_start] + startup[sink_end:]:
+        raise RuntimeError('emitted startup must not log before settings are restored')
+    boot = re.search(r'(?m)^\s*vars\.PepperedBootMessage\s*=\s*[^\n]+;', startup)
+    if boot is None or 'vars.PepperedBootMessage' in startup[:sink_start]:
+        raise RuntimeError('emitted startup must defer its boot message')
+    flags = []
+    for flag in ('PepperedLoggingReady', 'PepperedLogBannerSent'):
+        statement = 'vars.' + flag + ' = false;'
+        if startup.count(statement) != 1 or startup.index(statement) > sink_start:
+            raise RuntimeError('emitted startup must initialize ' + flag + ' before sink')
+        flags.append(statement)
+    logic = json.dumps(str(ROOT / 'Components/Peppered.AutoSplitter.dll'))
+    return '\n'.join([startup[hash_start:hash_end],
+                      'byte[] logicBytes = File.ReadAllBytes(' + logic + ');'] +
+                     flags + [sink, boot.group().strip()])
+
+
 def validate_settings(text):
     if text.count('vars.MonoMetadata.Images.Clear();') != 1:
         raise RuntimeError('emitted ASL must contain exactly one public image-cache refresh')
@@ -71,9 +109,13 @@ def validate_settings(text):
     if len(entries) != len(values):
         raise RuntimeError('duplicate generated ASL setting key')
     # Pin all 136 legacy IDs, defaults, labels, parents, and relative order.
-    # Digest is from the unchanged RC13 template (git 69789ae1); only the
-    # optional leaf may be inserted into a pre-existing layout.
+    # The only allowed default change is diagnostics true -> false; normalize
+    # that one known tuple before comparing the original RC13 digest.
     old_entries = [entry for entry in entries if entry[0] != 'ending.8.friend_loss']
+    if values['diagnostics'][0] is not False:
+        raise RuntimeError('diagnostics must be opt-in by default')
+    old_entries = [(key, 'true' if key == 'diagnostics' else default, label, parent)
+                   for key, default, label, parent in old_entries]
     old_digest = hashlib.sha256(json.dumps(old_entries, ensure_ascii=False,
         separators=(',', ':')).encode('utf-8')).hexdigest()
     if len(old_entries) != 136 or old_digest != '9289dbe53c9bb33e3d5b792dedb51ae2c96822043c6fb7755008a9281de04004':
@@ -95,7 +137,7 @@ def validate_settings(text):
             if parent != expected_parent:
                 raise RuntimeError('ending hierarchy too deep or wrong: ' + key)
     for key, expected in (
-        ('enableTimers', False), ('splitScenes', True), ('splitEndings', True),
+        ('enableTimers', False), ('diagnostics', False), ('splitScenes', True), ('splitEndings', True),
         ('scene.w0.coarse.office2', True),
         ('scene.w1.detailed.a3_1', False), ('scene.w3.branch.b3', False),
         ('scene.w3.branch.subspace4', False), ('scene.w3.branch.subspace5', False),
@@ -493,7 +535,12 @@ public sealed class Actions {
   vars.Helper=new FakeHelper();vars.Decision=new Decision();vars.SupportedBuild=true;vars.ReaderConfigured=true;
   vars.MonoMetadata=null;vars.LastMetadataScene="";vars.LastTheodoreMetadataScene="";vars.LastSurrenderMetadataScene="";vars.LastKarminaMetadataScene="";vars.LastTvStartMetadataScene="";vars.TheodoreSceneAddress=IntPtr.Zero;vars.MetadataRetryAfter=0L;vars.OptionalMetadataRetryAfter=0L;
   vars.AutoStarting=false;vars.AutoSplitting=false;vars.RebindOnAttach=false;vars.LastTrace="";vars.LastFault="";
-  vars.PepperedLog=(Action<string>)(s=>Logs.Add(s));
+  // Reuse startup's actual emitted sink (and boot expression) with a private cwd.
+__LOGGER_SETUP__
+  // A saved ON checkbox is not enough to authorize writes before first update.
+  settings["diagnostics"]=true;
+  ((Action<string>)vars.PepperedLog)("before first update");
+  settings["diagnostics"]=false;
   // The real helper owns vars.Log; script diagnostics must not use that slot.
   vars.Log=(Action<object>)(s=>{throw new Exception("reserved helper logger used");});
   var model=new TimerModel{CurrentState=timer};model.ResetEvent=()=>{Resets++;Action_onReset();};vars.TimerModel=model;
@@ -517,8 +564,72 @@ public static class AdapterTests {
  static int count;
  static void Check(bool condition,string label){count++;if(!condition)throw new Exception("FAIL "+label);}
  static bool HasLog(Actions a,string text){return a.Logs.Any(s=>s.IndexOf(text,StringComparison.Ordinal)>=0);}
- static Actions New(){var a=new Actions();a.Setup();a.settings["enableTimers"]=true;return a;}
+ // Legacy trace assertions explicitly opt in; the startup fixture itself stays OFF.
+ static Actions New(){var a=new Actions();a.Setup();a.settings["enableTimers"]=true;a.settings["diagnostics"]=true;return a;}
  static void FreshStart(Actions a){a.Tick("[Main Menu]");a.Tick("Office_1");Check(a.Starts==0,"intro not ready");((FakeReader)a.vars.Reader).Sample.StartReady=true;a.Tick("Office_1");Check(a.Starts==1,"fresh delayed start");}
+ static void LoggingPrivacyRegression(){
+  // The process cwd is a private temporary sandbox, never the user's Components.
+  const string path="Components/PEPPERED-autosplitter.log";
+  Check(!File.Exists(path),"private log initially absent");
+  var a=new Actions();a.Setup();
+  Check(!a.settings["diagnostics"]&&!(bool)a.vars.PepperedLoggingReady
+    &&!(bool)a.vars.PepperedLogBannerSent&&a.Logs.Count==0&&!File.Exists(path),
+    "emitted sink silent during startup and before settings restore");
+  a.settings["diagnostics"]=true;((Action<string>)a.vars.PepperedLog)("saved preset ON before first update");
+  Check(a.Logs.Count==0&&!File.Exists(path),"restored ON preset cannot log before first update");
+  // No game binaries are fabricated: an unsupported init must fail closed,
+  // while the actual successful init remains covered only by the optional
+  // PEPPERED_GAME_ROOT original-file fixture below.
+  var rejected=new Actions();rejected.Setup();
+  rejected.modules.Add(new ModuleStub{FileName=Path.Combine(Directory.GetCurrentDirectory(),"UnityPlayer.dll")});
+  bool unsupported=false;
+  try {rejected.Action_init();}catch(InvalidDataException){unsupported=true;}
+  Check(unsupported&&rejected.Logs.Count==0&&!File.Exists(path),
+   "unsupported-build init cannot produce a cold-start log");
+  a.settings["diagnostics"]=false;((Action<string>)a.vars.PepperedLog)("cold OFF");
+  var unavailable=new FakeReader();unavailable.Sample.Valid=false;
+  a.vars.Code=new FakeCode{Candidate=unavailable};a.vars.MonoMetadata=new FakeMonoMetadata();
+  a.vars.ReaderConfigured=false;a.Tick("[Main Menu]");
+  Check(((string)a.vars.LastFault).StartsWith("metadata wait:")&&a.Logs.Count==0&&!File.Exists(path),
+   "real update metadata-wait caller cannot create log or print when OFF");
+  Directory.CreateDirectory("Components");
+  File.WriteAllText(path,"PRIVATE EXISTING LOG\n");
+  File.SetLastWriteTimeUtc(path,DateTime.UtcNow.AddHours(-2));
+  byte[] original=File.ReadAllBytes(path);DateTime originalMtime=File.GetLastWriteTimeUtc(path);
+  a.vars.Code=typeof(StateMachine).Assembly;a.vars.Reader=new FakeReader();a.vars.ReaderConfigured=true;
+  a.vars.MonoMetadata=null;a.settings["enableTimers"]=false;
+  a.Tick("Office_1");((Action<string>)a.vars.PepperedLog)("existing OFF");a.Action_exit();
+  Check(a.Logs.Count==0&&original.SequenceEqual(File.ReadAllBytes(path))
+   &&File.GetLastWriteTimeUtc(path)==originalMtime&&a.Starts==0&&a.Resets==0&&a.Splits==0,
+   "OFF update/detach and direct logger leave existing file bytes, mtime and print untouched");
+  // First opt-in after OFF startup emits the real deferred banners exactly once.
+  a.settings["diagnostics"]=true;a.Tick("Office_1");
+  Check((bool)a.vars.PepperedLogBannerSent&&HasLog(a,"boot 0.4.0-rc14")
+   &&HasLog(a,"loaded 0.4.0-rc14")&&a.Logs.Count(s=>s.Contains("boot 0.4.0-rc14"))==1
+   &&a.Logs.Count(s=>s.Contains("loaded 0.4.0-rc14"))==1
+   &&File.ReadAllText(path).Contains("PEPPERED_ASL boot 0.4.0-rc14")
+   &&File.ReadAllText(path).Contains("PEPPERED_ASL loaded 0.4.0-rc14")
+   &&File.ReadAllBytes(path).Length>original.Length,
+   "ON first update creates bounded sink output and deferred boot/loaded banners");
+  ((Action<string>)a.vars.PepperedLog)("enabled trace");
+  Check(HasLog(a,"enabled trace")&&File.ReadAllText(path).Contains("PEPPERED_ASL enabled trace"),
+   "enabled direct call reaches actual emitted file and print sink");
+  int priorPrints=a.Logs.Count;byte[] priorBytes=File.ReadAllBytes(path);
+  DateTime priorMtime=File.GetLastWriteTimeUtc(path);
+  a.settings["diagnostics"]=false;((Action<string>)a.vars.PepperedLog)("disabled trace");
+  a.Tick("A_1");a.Action_exit();
+  Check(a.Logs.Count==priorPrints&&priorBytes.SequenceEqual(File.ReadAllBytes(path))
+   &&File.GetLastWriteTimeUtc(path)==priorMtime&&a.Starts==0&&a.Resets==0&&a.Splits==0,
+   "OFF after ON causes no append or DebugView print and no timer action");
+  a.settings["diagnostics"]=true;a.Tick("A_1");
+  ((Action<string>)a.vars.PepperedLog)("re-enabled\r\ntrace");
+  Check(HasLog(a,"re-enabled  trace")&&File.ReadAllText(path).Contains("re-enabled  trace")
+   &&a.Logs.Count(s=>s.Contains("boot 0.4.0-rc14"))==1
+   &&a.Logs.Count(s=>s.Contains("loaded 0.4.0-rc14"))==1
+   &&a.Starts==0&&a.Resets==0&&a.Splits==0,
+   "re-enabled sink works without repeating banner or changing timer outcomes");
+  Console.WriteLine("LOGGING_PRIVACY emitted sink OFF/ON/OFF/ON, private file bytes+mtime and print checked");
+ }
  static void LegacyTvBoundaryRegression(bool expectImageRefresh){
   foreach(string setting in new[]{"ending.5.with","ending.6.with","ending.7.with"}){
    var a=New();a.settings["autoStart"]=false;a.settings["splitWorlds"]=false;
@@ -1495,6 +1606,7 @@ public static class AdapterTests {
  }
  public static int Main(string[] args) {
   try {
+   LoggingPrivacyRegression();
    var a=New();a.settings["enableTimers"]=false;a.Tick("[Main Menu]");a.Tick("Office_1");Check(a.Starts==0,"disabled timer no start");
    a.settings["enableTimers"]=true;((FakeReader)a.vars.Reader).Sample.StartReady=true;a.Tick("Office_1");Check(a.Starts==1,"disabled start consumed only at actual ready");
    var b=New();FreshStart(b);int before=b.Splits;b.Tick("A_1");Check(b.Splits==before+1,"world split after start");
@@ -1554,6 +1666,7 @@ def run_variant(text, expected_refresh, label):
     methods = '\n'.join('public '+ret+' Action_'+name+'() {'+body(text,name)+'\n}' for name,ret in ACTIONS.items())
     settings = '\n'.join(line for line in body(text,'startup').splitlines() if line.strip().startswith('settings.Add('))
     harness = HARNESS.replace('__METHODS__',methods).replace('__SETTINGS__',settings).replace(
+        '__LOGGER_SETUP__', emitted_logger_setup(text)).replace(
         '__EXPECTED_REFRESH__', 'true' if expected_refresh else 'false'
     )
     with tempfile.TemporaryDirectory(prefix='peppered-asl-adapter-') as temp:
@@ -1567,7 +1680,10 @@ def run_variant(text, expected_refresh, label):
         env=dict(os.environ,MONO_PATH=str(ROOT/'Components'))
         game_root=os.environ.get('PEPPERED_GAME_ROOT')
         args=['mono',str(out)] + ([game_root] if game_root else [])
-        result=subprocess.run(args,env=env,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,timeout=30)
+        sandbox=Path(temp)/'private-components-cwd'
+        sandbox.mkdir()
+        result=subprocess.run(args,env=env,cwd=sandbox,text=True,stdout=subprocess.PIPE,
+                              stderr=subprocess.STDOUT,timeout=30)
         print(label + ': ' + result.stdout.strip())
         if result.returncode != 0:
             raise RuntimeError(label + ' adapter fixture failed: ' + str(result.returncode))

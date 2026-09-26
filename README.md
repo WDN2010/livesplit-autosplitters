@@ -14,7 +14,7 @@ Read-only LiveSplit auto splitters maintained by [WDN2010](https://github.com/WD
 - [Setup, supported build, endpoint settings and verification](PEPPERED/README.md)
 - [ASL source](PEPPERED/PEPPERED.asl) and [matching helper source](PEPPERED/src/)
 - Read-only auto start/reset, world/room splits and ending timestamps using Real Time.
-- Published RC14 retains the exact tested runtime bytes. The maintainer has confirmed gameplay testing on all endings. See [Troubleshooting](PEPPERED/README.md#troubleshooting) for auto-start recovery, Life Star timer-display behavior, timing adjudication and Discord support. Distribution-specific registry activation and upstream registry acceptance remain separate checks.
+- Published RC14 retains the tested timing/reader DLL and helper, with an opt-in-only diagnostics fix in the ASL. The maintainer has confirmed gameplay testing on all endings. See [Troubleshooting](PEPPERED/README.md#troubleshooting) for auto-start recovery, Life Star timer-display behavior, timing adjudication and Discord support. Distribution-specific registry activation and upstream registry acceptance remain separate checks.
 
 Game files, private runtime collections, personal logs and unrelated experimental splitters are not distributed. The dependency fetcher verifies the pinned upstream `asl-help` bytes. Root and project-owned Nunholy/PEPPERED source are MIT-licensed; helper attribution and its license are retained under each project's `third-party/asl-help/` directory.
 

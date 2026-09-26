@@ -4,7 +4,7 @@ Read-only auto start, world/room splits, reset and ending timestamps for the sup
 
 ## Release status
 
-This repository provides `0.4.0-rc14-optional-friend-loss-manual-test`, the RC14 build verified by the maintainer. Runtime source, emitted ASL, custom DLL and supported-build identity retain the exact tested bytes. The existing RC14 version string is retained rather than changing the executable solely for publication.
+This repository provides `0.4.0-rc14-optional-friend-loss-manual-test`, with a narrowly scoped opt-in diagnostics fix in the ASL. The timer/ending logic, custom DLL, supported-build identity and pinned helper remain the tested RC14 bytes. The ASL now keeps startup silent and checks the current diagnostics checkbox before any of its own logging output. Existing RC14 split/layout presets remain compatible; the boot banner identifies the diagnostics opt-in patch when logging is enabled.
 
 The maintainer confirmed on September 26, 2026 that the auto splitter has been tested on all endings, closing the previously outstanding Ending6 With/Against checks. This is user-confirmed gameplay testing, not a guarantee of frame-perfect timing. The intermittent auto-start issue is documented with a restart/main-menu workaround below; no unverified lifecycle patch has been applied.
 
@@ -46,7 +46,7 @@ The registry-style layout is different: its XML downloads only the ASL and `Pepp
 
 ## Settings
 
-There are137 custom setting IDs. Timer actions and category/scene selections remain opt-in; bounded diagnostics may be enabled by default. Enable the timer master, the appropriate auto-start/reset and split controls, and the selected route items under their parents. Standard component Start/Split/Reset controls must also permit the corresponding action.
+There are137 custom setting IDs. Timer actions and category/scene selections remain opt-in. Diagnostics are OFF by default; enabling them explicitly permits the ASL's diagnostic output. Enable the timer master, the appropriate auto-start/reset and split controls, and the selected route items under their parents. Standard component Start/Split/Reset controls must also permit the corresponding action.
 
 The selected events must match the number and order of segments in your LSS. Revisited scenes and world entries use per-run one-shot behavior; enabling every scene is not a substitute for a route-specific preset. Settings are stored in the LSL component, not in the LSS alone. Do not enable multiple unrelated finish options for an ordinary category run.
 
@@ -68,7 +68,7 @@ The selected events must match the number and order of segments in your LSS. Rev
 
 For an ordinary good Against ending, successful persuasion with zero stars still reaches the zero-star bad branch: preserve at least one star through the final judgement. The Ending6 checkbox does not certify that all80 stars or the no-loss category conditions were achieved. A full80-star pickup itinerary on the Against branch is not established by this timing implementation; do not assume the With-only +40 Merdeka victory reward applies there.
 
-For the optional friendship-loss Ending8 route, do not enable the new checkbox during ordinary Ending7 runs: it intentionally requests an earlier battle-loss split. The original surrender8 and all old136 setting definitions remain unchanged.
+For the optional friendship-loss Ending8 route, do not enable the new checkbox during ordinary Ending7 runs: it intentionally requests an earlier battle-loss split. The original surrender8 timing and all existing setting IDs/labels remain unchanged. The only existing default changed by the logging fix is diagnostics: it is now OFF.
 
 ## Troubleshooting
 
@@ -79,7 +79,9 @@ For the optional friendship-loss Ending8 route, do not enable the new checkbox d
 
 ## Diagnostics
 
-Use Sysinternals DebugView while LiveSplit runs and filter for `PEPPERED`. The emitter is LiveSplit, not the game process. Standard ASL `print()` does not guarantee an automatically created `LiveSplit.log` file.
+Diagnostics are **OFF by default**. With the checkbox disabled, the PEPPERED ASL does not create or append `Components/PEPPERED-autosplitter.log` and does not send its own diagnostic messages to DebugView. This also applies to startup and metadata-wait messages. Existing log files are left untouched; they are not deleted or truncated. Startup stays quiet until saved settings have been applied, and the boot banner is deferred until diagnostics is explicitly enabled.
+
+To investigate a problem, enable diagnostics deliberately, use Sysinternals DebugView while LiveSplit runs and filter for `PEPPERED`. The emitter is LiveSplit, not the game process. The ASL also writes its own bounded `Components/PEPPERED-autosplitter.log` while opted in; this is not a generic `LiveSplit.log`. Turn diagnostics off again when the capture is complete. The setting governs PEPPERED's own logger, not unrelated LiveSplit components or third-party helper output.
 
 A useful report includes the boot banner `0.4.0-rc14 optional-friend-loss`, attach/build result, selected endpoint, observed split time and a short video around the event. Remove private paths or unrelated captured application messages before sharing diagnostics publicly. Do not upload a save or game binary as a default troubleshooting step.
 
@@ -116,7 +118,7 @@ Its license is retained in `third-party/asl-help/LICENSE`; upstream source is ht
 
 ## Verification and limitations
 
-The RC14 runtime passed logic538, reader181, metadata bridge123, parent regression2907 and emitted-ASL322 assertions, with320 in the pre-refresh control. The137-setting official parser/settings gate and a separate enabled-optional-setting round-trip passed. All12 emitted action bodies matched the tested bodies. Fourteen legacy layouts were replayed against the delivered DLL with the new optional setting off, without changing their files.
+The RC14 runtime passed logic538, reader181, metadata bridge123, parent regression2907 and emitted-ASL332 assertions, with330 in the pre-refresh control, including actual-emitted logger tests for OFF/ON/OFF/ON, absent-file silence and unchanged existing-file bytes/mtime while disabled. The137-setting official parser/settings gate and a separate enabled-optional-setting round-trip passed. All12 emitted action bodies matched the tested bodies. Fourteen legacy layouts were replayed against the delivered DLL with the new optional setting off, without changing their files.
 
 The original-Mono owned-object evidence belongs to the unchanged reader and is not a new live-game run. Parser/settings and package passes do not prove full helper startup through the registry downloader. `build-receipt.json` records machine-generated build provenance; its runtime flag must not be substituted for the separately documented user acceptance status.
 
