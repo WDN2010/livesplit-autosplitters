@@ -1,0 +1,27 @@
+{
+  "asl_sha256": "4b1b99eab3bedcc005a863b845df4296e3eb16360c9f9d816eba4c5562acf33e",
+  "compiler_command": [
+    "mcs",
+    "-target:library",
+    "-sdk:4.8",
+    "-r:Microsoft.CSharp",
+    "-out:Components/Peppered.AutoSplitter.dll",
+    "src/Logic.cs",
+    "src/ReadOnlyReader.cs"
+  ],
+  "compiler_version": "6.14.1.0",
+  "dll_sha256": "fe378022fb5c5a36700ee6fb76b68f1a37ce1cef1aabd41fa993b04ccbe6b270",
+  "helper_sha256": "c0ece0762d65cb831082a465af2c2cd64cc745d5ede2b7eb339fb84030cb1fb5",
+  "runtime_tested": false,
+  "sources": {
+    "Logic.cs": "6b8ba9423a0401c4be6e82adb3a7f72bc1f91fe0e1ac2d428098f600aa8ed8b1",
+    "ReadOnlyReader.cs": "83dbc0c83dacec0f8f1f285b879bbec0ebb41981eb7090642e72f59bfc7608ca"
+  },
+  "supported_build_sha256": "650b38cbecb50db26e6f9126223232be533ba7dc39e0f88eb06fe82eb5668bcf",
+  "toolchain": {
+    "compiler": "mcs",
+    "compiler_version": "6.14.1.0",
+    "runtime": "mono",
+    "runtime_version": "6.14.1"
+  }
+}

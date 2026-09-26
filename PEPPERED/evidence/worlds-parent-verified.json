@@ -1,0 +1,32 @@
+[
+  {
+    "world": 0,
+    "key": "Chapter0",
+    "scene": "Office_1"
+  },
+  {
+    "world": 1,
+    "key": "Chapter1",
+    "scene": "A_1"
+  },
+  {
+    "world": 2,
+    "key": "Chapter2",
+    "scene": "A_7"
+  },
+  {
+    "world": 3,
+    "key": "Chapter3",
+    "scene": "B_0"
+  },
+  {
+    "world": 4,
+    "key": "Chapter4",
+    "scene": "G_0"
+  },
+  {
+    "world": 5,
+    "key": "Chapter5",
+    "scene": "G_End"
+  }
+]

@@ -1,0 +1,165 @@
+{
+  "platform": "Windows x64 Mono",
+  "unity_version": "2021.2.20f1",
+  "provenance": {
+    "source_archive": {
+      "name": "PEPPERED.zip",
+      "size": 263944472,
+      "sha256": "c6d80611eae235331f6e164036d883871f4e58d8d131bbeec551678e214d0a59"
+    },
+    "build_settings": "Recovered ProjectSettings/EditorBuildSettings.asset from the reviewed source archive",
+    "original_build": "Original Windows distribution contained in the reviewed source archive",
+    "mapping": "The zero-based m_Scenes index in EditorBuildSettings.asset maps directly to PEPPERED_Data/levelN in the original Windows build.",
+    "hash_method": "SHA-256 of the exact original file bytes; no game files are copied into this repository."
+  },
+  "files": {
+    "PEPPERED.exe": "d45d285f14ef68204bb2469bb563810bc0c1b62e51b397bb3f67f6ca3c973237",
+    "UnityPlayer.dll": "09bc8eda55993e20f8a287e51381ac1e68e55df9736373334860279fcf95b91a",
+    "PEPPERED_Data/Managed/Assembly-CSharp.dll": "9850435503f489ee42fb610f362017521b1f5af9f0fa2aa1318e1d9aec470253",
+    "PEPPERED_Data/Managed/mscorlib.dll": "8548091dcf0d2b0015cc458e87f2b0ce70aff151ca85a86746b3494fcfce233f",
+    "MonoBleedingEdge/EmbedRuntime/mono-2.0-bdwgc.dll": "6a0d22bc964e88684a4291e0ecf7b24094dc616b274c2dec052ea77dc72f79cd",
+    "PEPPERED_Data/globalgamemanagers": "eef07764258d9f43f96a2bb3d7f7023e1f4882e4ff045687749fc12854fba2c1",
+    "PEPPERED_Data/globalgamemanagers.assets": "da9a061e193ffa5bbbd0275029b4b71f0366595dd1e52402f208c5261a0eec25",
+    "PEPPERED_Data/level1": "13c198227474fc1c8d99cf1d1fb62cb5834934a8e861474c659e17e454a6517b",
+    "PEPPERED_Data/level2": "1c2d8e4686c063c7a377b3b98821e97db6486f98bea459191a9812c937c8cc3c",
+    "PEPPERED_Data/level9": "233225ab485d162afbb3c70db40963f6ec77be3a28fac37e9c3b4fbfddb0d9fc",
+    "PEPPERED_Data/level18": "c8ec82a8f01037584085b7844ae1d24208cca79daddc19d6e72aa989b6adb893",
+    "PEPPERED_Data/level37": "56734c17cd828501c2f159cef71fe84011dd10da23ca96cc79fedc13f8f1ba63",
+    "PEPPERED_Data/level59": "4f863fdaee7248d02d27d9691c5a0ed5e0804ffe7a6c1b52c8feb271df762f33",
+    "PEPPERED_Data/level63": "bd19dfb786963e54db15039b250ddf227d965546d5c288dd83426397532d4446",
+    "PEPPERED_Data/level64": "5e53705664ce5c64a54549b6d53f651f7760cc7b0ab1cdd56bebab920e9a0cc3",
+    "PEPPERED_Data/level80": "787d43758bc30e9250a52f3bfbf101a6cf9d18e70ba67781f54fac72a09a6f51",
+    "PEPPERED_Data/level93": "b259f94ffae56b23d8da1049f30eef2a9f6c2724fe9d42f66973107ee5b13597",
+    "PEPPERED_Data/level103": "1693ddc4bdf56b864fb56b2fcdf0603b3104b693d7a9ca3b6428dda2a9bbe89a",
+    "PEPPERED_Data/level104": "d2e1b80f95b3f9d612e608815ff5123c2a8f4c0617df9509b5e32624dc7ee7af",
+    "PEPPERED_Data/Managed/Unity.TextMeshPro.dll": "8cd39c3c5477f826b0f9efd9fd536b024fbd3e553e520a0aef85f7a08f108b7a",
+    "PEPPERED_Data/level4": "76495bed5c3ebfdb6f8d67702196dff2d169fdb8f758487d7674e8d0d8acda52",
+    "PEPPERED_Data/level5": "3c1d3f2b6347306bdd31748acdb0d1d33b12d3eb4bd67193dc893b3aaf3df940",
+    "PEPPERED_Data/level72": "44434a176d4b9b50cadc6e8c9e5a04435f9d57bfb4e7fa557c475cd381818b32",
+    "PEPPERED_Data/level79": "53d450ee1210e7fad9d238bef22bbfffa4a2260f21627c9922d9644694274f1b",
+    "PEPPERED_Data/Managed/UnityEngine.UI.dll": "83e5e19e23bdc95bc92d21e3d8f03cce880dab60d253695b38fcd88e8d82610c",
+    "PEPPERED_Data/Managed/UnityEngine.CoreModule.dll": "dd1053817d73f810f53ff73ddbeae7509ae4cef4106b03248366e8340c4b3b64",
+    "PEPPERED_Data/level66": "0820915119ae2d42b45db69dee77a07c1e2b1c57745c2d022b13a6719885d902"
+  },
+  "semantic_scenes": {
+    "main_menu_reset": {
+      "scene": "[Main Menu]",
+      "build_index": 1,
+      "original_path": "PEPPERED_Data/level1",
+      "recovered_scene_path": "Assets/Scenes/[Main Menu].unity",
+      "sha256": "13c198227474fc1c8d99cf1d1fb62cb5834934a8e861474c659e17e454a6517b"
+    },
+    "world0": {
+      "scene": "Office_1",
+      "build_index": 2,
+      "original_path": "PEPPERED_Data/level2",
+      "recovered_scene_path": "Assets/Scenes/Areas/Office/Office_1.unity",
+      "sha256": "1c2d8e4686c063c7a377b3b98821e97db6486f98bea459191a9812c937c8cc3c"
+    },
+    "world1": {
+      "scene": "A_1",
+      "build_index": 9,
+      "original_path": "PEPPERED_Data/level9",
+      "recovered_scene_path": "Assets/Scenes/Areas/Abyss/A_1.unity",
+      "sha256": "233225ab485d162afbb3c70db40963f6ec77be3a28fac37e9c3b4fbfddb0d9fc"
+    },
+    "world2": {
+      "scene": "A_7",
+      "build_index": 18,
+      "original_path": "PEPPERED_Data/level18",
+      "recovered_scene_path": "Assets/Scenes/Areas/Abyss/A_7.unity",
+      "sha256": "c8ec82a8f01037584085b7844ae1d24208cca79daddc19d6e72aa989b6adb893"
+    },
+    "world3": {
+      "scene": "B_0",
+      "build_index": 37,
+      "original_path": "PEPPERED_Data/level37",
+      "recovered_scene_path": "Assets/Scenes/Areas/Beach City/B_0.unity",
+      "sha256": "56734c17cd828501c2f159cef71fe84011dd10da23ca96cc79fedc13f8f1ba63"
+    },
+    "bigman": {
+      "scene": "B_6.6",
+      "build_index": 59,
+      "original_path": "PEPPERED_Data/level59",
+      "recovered_scene_path": "Assets/Scenes/Areas/Beach City/B_6.6.unity",
+      "sha256": "4f863fdaee7248d02d27d9691c5a0ed5e0804ffe7a6c1b52c8feb271df762f33"
+    },
+    "merdeka3": {
+      "scene": "B_Merdeka",
+      "build_index": 63,
+      "original_path": "PEPPERED_Data/level63",
+      "recovered_scene_path": "Assets/Scenes/Areas/Beach City/B_Merdeka.unity",
+      "sha256": "bd19dfb786963e54db15039b250ddf227d965546d5c288dd83426397532d4446"
+    },
+    "merdeka3_aftermath": {
+      "scene": "B_Aftermath",
+      "build_index": 64,
+      "original_path": "PEPPERED_Data/level64",
+      "recovered_scene_path": "Assets/Scenes/Areas/Beach City/B_Aftermath.unity",
+      "sha256": "5e53705664ce5c64a54549b6d53f651f7760cc7b0ab1cdd56bebab920e9a0cc3"
+    },
+    "world4": {
+      "scene": "G_0",
+      "build_index": 80,
+      "original_path": "PEPPERED_Data/level80",
+      "recovered_scene_path": "Assets/Scenes/Areas/Golf/G_0.unity",
+      "sha256": "787d43758bc30e9250a52f3bfbf101a6cf9d18e70ba67781f54fac72a09a6f51"
+    },
+    "world5": {
+      "scene": "G_End",
+      "build_index": 93,
+      "original_path": "PEPPERED_Data/level93",
+      "recovered_scene_path": "Assets/Scenes/Areas/Golf/G_End.unity",
+      "sha256": "b259f94ffae56b23d8da1049f30eef2a9f6c2724fe9d42f66973107ee5b13597"
+    },
+    "theodore": {
+      "scene": "T_Boss",
+      "build_index": 103,
+      "original_path": "PEPPERED_Data/level103",
+      "recovered_scene_path": "Assets/Scenes/Areas/Golf/T_Boss.unity",
+      "sha256": "1693ddc4bdf56b864fb56b2fcdf0603b3104b693d7a9ca3b6428dda2a9bbe89a"
+    },
+    "theodore_end": {
+      "scene": "T_End",
+      "build_index": 104,
+      "original_path": "PEPPERED_Data/level104",
+      "recovered_scene_path": "Assets/Scenes/Areas/Golf/T_End.unity",
+      "sha256": "d2e1b80f95b3f9d612e608815ff5123c2a8f4c0617df9509b5e32624dc7ee7af"
+    },
+    "ending_office_3": {
+      "scene": "Office_3",
+      "build_index": 4,
+      "original_path": "PEPPERED_Data/level4",
+      "recovered_scene_path": "Assets/Scenes/Areas/Office/Office_3.unity",
+      "sha256": "76495bed5c3ebfdb6f8d67702196dff2d169fdb8f758487d7674e8d0d8acda52"
+    },
+    "ending_office_4": {
+      "scene": "Office_4",
+      "build_index": 5,
+      "original_path": "PEPPERED_Data/level5",
+      "recovered_scene_path": "Assets/Scenes/Areas/Office/Office_4.unity",
+      "sha256": "3c1d3f2b6347306bdd31748acdb0d1d33b12d3eb4bd67193dc893b3aaf3df940"
+    },
+    "ending_s_4": {
+      "scene": "S_4",
+      "build_index": 72,
+      "original_path": "PEPPERED_Data/level72",
+      "recovered_scene_path": "Assets/Scenes/Areas/Abyss/S_4.unity",
+      "sha256": "44434a176d4b9b50cadc6e8c9e5a04435f9d57bfb4e7fa557c475cd381818b32"
+    },
+    "ending_subspace_final": {
+      "scene": "Subspace_Final",
+      "build_index": 79,
+      "original_path": "PEPPERED_Data/level79",
+      "recovered_scene_path": "Assets/Scenes/Areas/Secret Locations/Subspace_Final.unity",
+      "sha256": "53d450ee1210e7fad9d238bef22bbfffa4a2260f21627c9922d9644694274f1b"
+    },
+    "ending_b_end": {
+      "scene": "B_End",
+      "build_index": 66,
+      "original_path": "PEPPERED_Data/level66",
+      "recovered_scene_path": "Assets/Scenes/Areas/Beach City/B_End.unity",
+      "sha256": "0820915119ae2d42b45db69dee77a07c1e2b1c57745c2d022b13a6719885d902"
+    }
+  }
+}

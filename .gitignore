@@ -12,3 +12,6 @@
 
 # Private runtime collections must never be published.
 Nunholy_IGT_runtime_probe*.zip
+
+# Generated PEPPERED publication/package output receipt.
+PEPPERED/evidence/package-verification.json

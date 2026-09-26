@@ -9,7 +9,14 @@ Read-only LiveSplit auto splitters maintained by [WDN2010](https://github.com/WD
 - Classic/Any%: automatic start/reset, floor/final splits and game time.
 - Current source is based on the reviewed `1.2.0-rc4-cold-start-manual-test` candidate. The tester reports normal manual-load operation, but a full recorded Windows registry-activation/lifecycle matrix is still pending. This repository is not a claim of central-registry acceptance.
 
-Game files, private runtime collections, personal logs and unrelated experimental splitters are not distributed. The dependency fetcher verifies the pinned upstream `asl-help` bytes. Root and Nunholy source are MIT-licensed; helper attribution and its license are retained under `Nunholy/third-party/asl-help/`.
+## PEPPERED
+
+- [Setup, supported build, endpoint settings and verification](PEPPERED/README.md)
+- [ASL source](PEPPERED/PEPPERED.asl) and [matching helper source](PEPPERED/src/)
+- Read-only auto start/reset, world/room splits and ending timestamps using Real Time.
+- Published RC14 retains the exact tested runtime bytes. The maintainer has confirmed gameplay testing on all endings. See [Troubleshooting](PEPPERED/README.md#troubleshooting) for auto-start recovery, Life Star timer-display behavior, timing adjudication and Discord support. Distribution-specific registry activation and upstream registry acceptance remain separate checks.
+
+Game files, private runtime collections, personal logs and unrelated experimental splitters are not distributed. The dependency fetcher verifies the pinned upstream `asl-help` bytes. Root and project-owned Nunholy/PEPPERED source are MIT-licensed; helper attribution and its license are retained under each project's `third-party/asl-help/` directory.
 
 ## Reproduce offline checks
 
