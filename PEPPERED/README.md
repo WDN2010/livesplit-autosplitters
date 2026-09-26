@@ -42,7 +42,7 @@ For a manual Scriptable Auto Splitter component, select `PEPPERED.asl`. An exist
 
 Keep a backup of the previous matching ASL/DLL pair. Never mix a new ASL with an old DLL: the script checks the exact bytes and fails closed on a mismatch. Preserve personal LSS/LSL/PB/history files; none are required to be overwritten by a runtime update.
 
-The registry-style layout is different: the downloader puts all three payloads in `LiveSplit/Components`, including the ASL. The script already opens its dependencies at those `Components/...` paths. A clean registry-style activation check is still required before treating that installation path as tested.
+The registry-style layout is different: its XML downloads only the ASL and `Peppered.AutoSplitter.dll` into `LiveSplit/Components`. **Install the documented `asl-help` dependency separately into `Components/asl-help` before activation.** The script does not download it automatically and still verifies its pinned digest. A clean registry-style activation check is still required before treating that installation path as tested.
 
 ## Settings
 
